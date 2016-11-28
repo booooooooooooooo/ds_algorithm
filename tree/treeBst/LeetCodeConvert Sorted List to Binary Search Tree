@@ -1,0 +1,55 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+
+ /**
+ Caution: Global node!!!!
+ TODO:rethink
+ */
+public class Solution {
+    ListNode pointer;
+
+    public TreeNode sortedListToBST(ListNode head) {
+        //exluce null case. Not necessary in this problem
+        if(head == null) return null;
+
+        int len = 0;
+        ListNode node = head;
+        while(node != null){
+          len++;
+          node = node.next;
+        }
+
+        pointer = head;
+        return solve(0, len - 1);
+    }
+
+    public TreeNode solve(int start, int end){
+      if(start > end) return null;
+      else{
+        int mid = start + (end - start) / 2;
+        TreeNode leftSub = solve( start, mid - 1);
+        TreeNode parent = new TreeNode(pointer.val);
+        pointer = pointer.next;
+        TreeNode rightSub = solve(mid + 1, end);
+        parent.left = leftSub;
+        parent.right = rightSub;
+        return parent;
+      }
+    }
+}

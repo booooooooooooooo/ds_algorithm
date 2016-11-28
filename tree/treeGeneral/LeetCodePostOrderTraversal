@@ -1,0 +1,86 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+/**
+Recursive
+*/
+public class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+      List<Integer> result = new ArrayList<Integer>();
+      solve(result, root);
+      return result;
+    }
+    public void solve(List<Integer> result, TreeNode node){
+      if(node == null) return;
+      else{
+        solve(result, node.left);
+        solve(result, node.right);
+        result.add(node.val);
+      }
+    }
+}
+
+
+/**
+Iterative1
+TODO:rethink
+*/
+public class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+      List<Integer> result = new ArrayList<result>();
+      Stack<TreeNode> stack = new Stack<TreeNode>();
+      TreeNode lastNodeVisited = null;
+      TreeNode node = root;
+      while( !stack.isEmpty() || node != null){
+        if(node != null){
+          stack.push(node);
+          node = node.left;
+        }else{
+          TreeNode peekNode = stack.peek();
+          if(peekNode.right != null && lastNodeVisited != peekNode.right)
+            node = peekNode.right;
+          else{
+            result.add(peekNode.val);
+            lastNodeVisited = stack.pop();
+          }
+        }
+      }
+      return result;
+    }
+}
+
+
+/**
+Iterative2
+*/
+public class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+      List<Integer> result = new ArrayList<Integer>();
+      Stack<TreeNode> stackNode = new Stack<TreeNode>();
+      Stack<Integer> stackIndicator = new Stack<Integer>();
+      stackNode.push(root);
+      stackIndicator.push(0);
+      while( !stackNode.isEmpty() ){
+        TreeNode node = stackNode.pop();
+        int i = stackIndicator.pop();
+        if(node == null) continue;
+        else if(i == 1) result.add(node.val);
+        else{
+          stackNode.push(node);
+          stackIndicator.push(1);
+          stackNode.push(node.right);
+          stackIndicator.push(0);
+          stackNode.push(node.left);
+          stackIndicator.push(0);
+        }
+      }
+      return result;
+    }
+}

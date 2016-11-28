@@ -1,0 +1,92 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+  ListNode node;
+
+    public ListNode sortList(ListNode head) {
+      //exclude null
+      if(head == null) return null;
+
+      //get length of linkedList
+      ListNode pointer = head;
+      int len = 0;
+      while(pointer != null){
+        len++;
+        pointer = pointer.next;
+      }
+
+
+      //initialize node
+      node = head;
+
+
+      //get and return result
+      return solve(0, len - 1) ;
+
+
+    }
+    public ListNode solve(int start, int end){
+      if(start == end){
+        ListNode temp = node;
+        node = node.next;
+        return temp;
+      }
+      else{
+        int mid = start + (end - start) / 2;
+        ListNode h1 = solve(start, mid );
+        ListNode h2 = solve(mid + 1, end);
+        return mergeTwoLists(h1, mid - start + 1, h2, end - mid);
+      }
+    }
+
+    public ListNode mergeTwoLists(ListNode h1, int l1, ListNode h2, int l2){
+
+
+      //create dummy
+      ListNode dummyHead = new ListNode(0);
+
+      //create pointers
+      ListNode f = dummyHead;
+      ListNode p1 = h1;
+      ListNode p2 = h2;
+
+      //create counts
+      int count1 = l1;
+      int count2 = l2;
+
+      //scan
+      while(count1 > 0 || count2 > 0){
+        if( count1 > 0 && count2 > 0 ){
+          if(p1.val < p2.val){
+            f.next = p1;
+            p1 = p1.next;
+            count1--;
+          }else{
+            f.next = p2;
+            p2 = p2.next;
+            count2--;
+          }
+        }else if( count1 > 0){
+          f.next = p1;
+          p1 = p1.next;
+          count1--;
+        }else{
+          f.next = p2;
+          p2 = p2.next;
+          count2--;
+        }
+        f = f.next;
+      }
+
+      f.next = null;//!!! Caution! 断开与后面的藕断丝连
+
+      //return
+      return dummyHead.next;
+    }
+}

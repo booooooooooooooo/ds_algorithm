@@ -1,0 +1,74 @@
+/**
+One Pass!
+I am satisfied!
+*/
+
+public class Solution {
+    public int myAtoi(String str) {
+        //exclude null
+        if(str == null) return 0; //no conversion : null str
+
+        //exclude empty
+        if(str.isEmpty()) return 0; //no conversion : empty str
+
+
+        //find index of first non-whitespace character
+        int pointer = 0;
+        while(pointer <= str.length() - 1){
+          if(str.charAt(pointer) == ' ') pointer++;
+          else break;
+        }
+        if(pointer == str.length()) return 0;//no conversion : no non-whitespace character
+
+        //check the first symbol and adjust pointer
+        boolean isNegative;
+        if(str.charAt(pointer) == '+'){
+          isNegative = false;
+          pointer++;
+        }
+        else if(str.charAt(pointer) == '-'){
+          isNegative = true;
+          pointer++;
+        }else
+          isNegative = false;
+
+        //call function and return result
+        return isNegative ?  getNegativeInteger(pointer, str) : getPositiveInteger(pointer, str);
+    }
+
+
+    public int getNegativeInteger(int pointer, String str){
+      String digits = "";
+      int count = 0;
+      while(pointer <= str.length() - 1){
+        if( str.charAt(pointer) < 48 || str.charAt(pointer) > 57) break;
+        else{
+          if(count >= 10)
+            return Integer.MIN_VALUE;
+          digits += str.charAt(pointer);
+          count++;
+          pointer++;
+        }
+      }
+      if(count == 10 && digits.compareTo("2147483648") >= 0) return Integer.MIN_VALUE;
+      else return (-1) * Integer.parseInt("0" + digits);//maybe no conversion: digits == ""
+    }
+
+
+    public int getPositiveInteger(int pointer, String str){
+      String digits = "";
+      int count = 0;
+      while(pointer <= str.length() - 1){
+        if( str.charAt(pointer) < 48 || str.charAt(pointer) > 57) break;
+        else{
+          if(count >= 10)
+            return Integer.MAX_VALUE;
+          digits += str.charAt(pointer);
+          count++;
+          pointer++;
+        }
+      }
+      if(count == 10 && digits.compareTo("2147483647") >= 0) return Integer.MAX_VALUE;
+      else return Integer.parseInt("0" + digits);//maybe no conversion: digits == ""
+    }
+}

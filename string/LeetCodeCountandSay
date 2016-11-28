@@ -1,0 +1,32 @@
+public class Solution {
+    public String countAndSay(int n) {
+      //exclude negative, 0
+      if(n <= 0) return "";
+
+      String result = "1";
+      for(int i = 2; i <= n; i++){
+        result = update(result);
+      }
+      return result;
+    }
+    public String update(String s){
+      String sUpdated = "";
+      int i = 0;
+      while(i <= s.length() - 1){
+        int count = countDuplicate(s, i);
+        sUpdated = sUpdated + (char)(count + '0');
+        sUpdated = sUpdated + s.charAt(i);
+        i = i + count;
+      }
+      return sUpdated;
+    }
+    public int countDuplicate(String s, int index){
+      int count = 1;
+      while(index <= s.length() - 2){
+        if(s.charAt(index) == s.charAt(index + 1)) count++;
+        else break;
+        index++;
+      }
+      return count;
+    }
+}

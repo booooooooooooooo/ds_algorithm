@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    TreeNode n1 = null;
+    TreeNode n2 = null;
+    TreeNode preNode = null;
+    public void recoverTree(TreeNode root) {
+      //exclude invalid data. Not necessary if all test cases are valid.
+      if(root == null) return; // size = 0
+      if(root.left == null && root.right == null) return;// size = 1
+
+
+      solve( root );
+
+      //switch n1 and n2
+      int temp = n1.val;
+      n1.val = n2.val;
+      n2.val = temp;
+
+    }
+    public void solve(TreeNode node){
+      if( node == null ) return;
+      else{
+        solve( node.left );
+        visit( node );
+        solve( node.right );
+      }
+    }
+    public void visit(TreeNode node){
+      if(preNode != null && node.val < preNode.val ){
+        if(n1 == null){
+          n1 = preNode;
+          n2 = node;//Important! n1 and n2 may be next to each other!! If not, n2 will be updated later.
+        }else
+          n2 = node;
+      }
+      preNode = node;
+    }
+}

@@ -1,0 +1,46 @@
+public class Solution {
+    public String addBinary(String a, String b) {
+      //exclude null
+      if(a == null || b == null) return "";
+
+      //exclude empty String
+      if(a.isEmpty() || b.isEmpty())
+        return a.isEmpty() ? b : a;
+
+      //Swithch a and b is a.length() > b.length()
+      if(a.length() > b.length()){
+        String temp = a;
+        a = b;
+        b = temp;
+      }
+
+      String result = "";
+      char acc = '0';
+      //add common parts of a and b
+      int pa = a.length() - 1;
+      int pb = b.length() - 1;
+      while( pa >= 0 ){
+        char ca = a.charAt(pa);
+        char cb = b.charAt(pb);
+        char toAppend = (char)  ( ( ca - '0' + cb - '0' + acc - '0' ) % 2 + '0' ) ;
+        acc = (char)  ( ( ca - '0' + cb - '0' + acc - '0' ) / 2 + '0' ) ;
+        result = toAppend + result;
+        pa--;
+        pb--;
+      }
+      //add rest parts of b
+      while(pb >= 0){
+        char cb = b.charAt(pb);
+        char toAppend = (char)  ( ( cb - '0' + acc - '0' ) % 2 + '0' ) ;
+        acc = (char)  ( ( cb - '0' + acc - '0' ) / 2 + '0' ) ;
+        result = toAppend + result;
+        pb--;
+      }
+      //add acc if it is not '0'
+      result = acc == '0' ?  result : '1' + result;
+
+
+      //return result
+      return result;
+    }
+}

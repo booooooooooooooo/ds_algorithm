@@ -1,0 +1,25 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
+
+ /**
+Caution: Long Long Long!!!!
+ */
+public class Solution {
+    public boolean isValidBST(TreeNode root) {
+      return solve(Long.MIN_VALUE, Long.MAX_VALUE , root);
+    }
+    public boolean solve(long min, long max, TreeNode node){
+      if(node == null) return true;
+      else
+        return solve(min, Math.min(node.val, max), node.left) && solve(Math.max(min, node.val), max, node.right) && (node.val > min && node.val < max);
+
+    }
+}
