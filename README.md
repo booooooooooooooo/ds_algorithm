@@ -14,3 +14,5 @@ git commit -m "comments"
 
 git push
 是push到github
+
+git push -f origin master
