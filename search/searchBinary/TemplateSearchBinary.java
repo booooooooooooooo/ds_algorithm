@@ -1,43 +1,32 @@
 /**
 All ranges are [   ) intervals.
+lowerBound: index of first element who >= value or array.length
+upperBound: index of first element who > value or array.length
 */
 
 public class TemplateSearchBinary {
-  // input [first, last)
   int lowerBound(int[] array, int first, int last, int value) {
-    int count = last - first;
-    while (count > 0) {
-      int step = count / 2;
-      int mid = first + step;
-      if (array[mid] < value) {
-        first = mid + 1;
-        count -= step + 1;
-      } else
-        count = step;
+    while(first < last){
+      int mid = first + (last - first) / 2; //prevent max integer overflow of (first + last) / 2
+      if(array[mid] < value) first = mid + 1;
+      else last = mid;
     }
     return first;
   }
 
-  // input [first, last)
+
   int upperBound(int[] array, int first, int last, int value) {
-    int count = last - first;
-    while (count > 0) {
-      int step = count / 2;
-      int mid = first + step;
-      if (!(value < array[mid])) {
-        first = mid + 1;
-        count -= step + 1;
-      } else {
-        count = step;
-      }
+    while(first < last){
+      int mid = first + (last - first) / 2;
+      if(array[mid] <= value) first = mid + 1;
+      else last = mid;
     }
     return first;
   }
 
-  public int[] searchRange(int[] nums, int target) {
-    int l = lowerBound(nums, 0, nums.length, target);
-    int h = upperBound(nums, 0, nums.length, target);
-    //[l, h)
+  public int[] searchRange(int[] nums, int value) {
+    int l = lowerBound(nums, 0, nums.length, value);
+    int h = upperBound(nums, 0, nums.length, value);
     if (l == h) {
       return new int[] {-1, -1};
     }

@@ -1,0 +1,23 @@
+/**
+Only use lowerbound and check whether the lowerBound is target.  A more routine method is use lowerbound and upperbound.
+*/
+
+public class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+      int first = 0;
+      int last = matrix.length * matrix[0].length;
+      while(first < last){
+        int mid = (first + last) / 2;
+        if( getKthFromMatrix(mid, matrix) < target) first = mid + 1;
+        else last = mid;
+      }
+      if(first < matrix.length * matrix[0].length && getKthFromMatrix(first, matrix) == target) return true;
+      else return false;
+    }
+
+    public int getKthFromMatrix(int k, int[][] matrix){
+      int row = k / matrix[0].length;
+      int column = k % matrix[0].length;
+      return matrix[row][column];
+    }
+}
