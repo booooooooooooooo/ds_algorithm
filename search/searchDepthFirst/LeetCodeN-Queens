@@ -1,16 +1,15 @@
 public class Solution {
     public List<List<String>> solveNQueens(int n) {
         List<List<String>> result = new ArrayList<List<String>>();
-        //constructe parameter and call dfs(...)
         boolean[] used = new boolean[n];
-        Arrays.fill(used, false;)
+        Arrays.fill(used, false);
         dfs(n, used, new ArrayList<Integer>(), result);
         //return result
         return result;
     }
 
     public void dfs(int n, boolean[] used, List<Integer> permutation, List<List<String>> result){
-      if(permutation.size() == n) doSomething(permutation, result);
+      if(permutation.size() == n) update(permutation, result);
       for(int i = 0; i < n; i++){
         if(!used[i]){
           permutation.add(i);
@@ -22,20 +21,10 @@ public class Solution {
       }
     }
 
-    //convert valid permutation to solution and add solution to result.
-    public void doSomething(List<Integer> permutation, List<List<String>> result){
+    //check and add valid solution to result.
+    public void update(List<Integer> permutation, List<List<String>> result){
       if(isSafeDiagonal(permutation)){
-        int n = permutation.size();
-        char[][] panel = new char[n][n];
-        for(int i = 0; i < n; i++){
-          Arrays.fill(panel[i], '.');
-          int j = permutation.get(i);
-          panel[i][j] = 'Q';
-        }
-        List<String> solution = new ArrayList<String>();
-        for(int i = 0; i < n; i++){
-          solution.add( new String(panel[i]) );
-        }
+        result.add(permutationToSolution(permutation));
       }
     }
 
@@ -43,9 +32,24 @@ public class Solution {
     public boolean isSafeDiagonal(List<Integer> permutation){
       for(int i = 0; i < permutation.size(); i++){
         for(int j = i + 1; j < permutation.size(); j++){
-          if(Math.abs(permutation.get(i) - permutation.get(j)) == 1 ) return false;
+          if( Math.abs( permutation.get(j) - permutation.get(i) ) == (j - i) ) return false;
         }
       }
       return true;
+    }
+    //convert permutation list to solution string
+    public List<String> permutationToSolution(List<Integer> permutation){
+      int n = permutation.size();
+      char[][] panel = new char[n][n];
+      for(int i = 0; i < n; i++){
+        Arrays.fill(panel[i], '.');
+        int j = permutation.get(i);
+        panel[i][j] = 'Q';
+      }
+      List<String> solution = new ArrayList<String>();
+      for(int i = 0; i < n; i++){
+        solution.add( new String(panel[i]) );
+      }
+      return solution;
     }
 }

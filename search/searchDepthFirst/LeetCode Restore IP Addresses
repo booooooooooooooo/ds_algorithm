@@ -1,0 +1,36 @@
+public class Solution {
+    public List<String> restoreIpAddresses(String s) {
+      List<String> result = new ArrayList<String>();
+      int len = s.length();
+      int[] div = new int[5];//[div[i], div[i + 1])
+      div[0] = 0;
+      div[4] = len;
+      //prunning while dfs
+      for(div[1] = 1; div[1] < Math.min(len - 2, 4); div[1]++){
+        for(div[2] = div[1] + 1; div[2] < Math.min(len - 1, 7); div[2]++ ){
+          for(div[3] = div[2] + 1; div[3] < Math.min(len, 10); div[3]++){
+            if(isValid(s, div)) result.add(getIP(s, div));
+          }
+        }
+      }
+      return result;
+    }
+
+    public boolean isValid(String s, int[] div){
+      for(int i = 0; i < div.length - 1; i++){
+        String temp = s.substring(div[i], div[i + 1]);
+        if(temp.length() > 3) return false;
+        if(temp.length() != 1 && temp.charAt(0) == '0') return false;
+        if(Integer.parseInt(temp) > 255) return false;
+      }
+      return true;
+    }
+    public String getIP(String s, int[] div){
+      String ip = "";
+      for(int i = 0; i < div.length - 1; i++){
+        ip += s.substring(div[i], div[i + 1]);
+        if(i != div.length - 2) ip += ".";
+      }
+      return ip;
+    }
+}
