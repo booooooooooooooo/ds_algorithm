@@ -1,0 +1,51 @@
+public class Solution {
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> result = new ArrayList<List<String>>();
+        //constructe parameter and call dfs(...)
+        boolean[] used = new boolean[n];
+        Arrays.fill(used, false;)
+        dfs(n, used, new ArrayList<Integer>(), result);
+        //return result
+        return result;
+    }
+
+    public void dfs(int n, boolean[] used, List<Integer> permutation, List<List<String>> result){
+      if(permutation.size() == n) doSomething(permutation, result);
+      for(int i = 0; i < n; i++){
+        if(!used[i]){
+          permutation.add(i);
+          used[i] = true;
+          dfs(n, used, permutation, result);
+          permutation.remove(permutation.size() - 1);
+          used[i] = false;
+        }
+      }
+    }
+
+    //convert valid permutation to solution and add solution to result.
+    public void doSomething(List<Integer> permutation, List<List<String>> result){
+      if(isSafeDiagonal(permutation)){
+        int n = permutation.size();
+        char[][] panel = new char[n][n];
+        for(int i = 0; i < n; i++){
+          Arrays.fill(panel[i], '.');
+          int j = permutation.get(i);
+          panel[i][j] = 'Q';
+        }
+        List<String> solution = new ArrayList<String>();
+        for(int i = 0; i < n; i++){
+          solution.add( new String(panel[i]) );
+        }
+      }
+    }
+
+    //permutations guarantees no horizonal and vertical attack. isSafeDiagonal guarantees no diagonal attack.
+    public boolean isSafeDiagonal(List<Integer> permutation){
+      for(int i = 0; i < permutation.size(); i++){
+        for(int j = i + 1; j < permutation.size(); j++){
+          if(Math.abs(permutation.get(i) - permutation.get(j)) == 1 ) return false;
+        }
+      }
+      return true;
+    }
+}

@@ -1,0 +1,22 @@
+/**
+TODO: check correctness
+*/
+public class TemplatePermutation {
+
+    public void dfsPermutation(int n, boolean[] used, List<Integer> permutation){
+      if(permutation.size() == n) doSomething(permutation);;
+      for(int i = 0; i < n; i++){
+        if(!used[i]){
+          permutation.add(i);
+          used[i] = true;
+          dfsPermutation(n, used, permutation);
+          permutation.remove(permutation.size() - 1);
+          used[i] = false;
+        }
+      }
+    }
+
+    public void doSomething(List<Integer> permutation){
+      //TODO
+    }
+}

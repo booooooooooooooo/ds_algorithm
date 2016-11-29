@@ -1,3 +1,7 @@
+/**
+Fill each connect area with two colors.
+*/
+
 import java.util.*;
 public class CF445A {
   static int[] dx = {0, 1, 0, -1};

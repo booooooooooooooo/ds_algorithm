@@ -1,3 +1,7 @@
+
+/**
+return # of "connected" area - 1
+*/
 import java.util.*;
 
 public class DFS_CF217A {
