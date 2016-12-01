@@ -57,7 +57,26 @@ public class Solution {
 
     //TODO updateResult
     public void updateResult(String endWord, String word, HashTable<String, List<String>> pathTable, List<List<String>> result){
-
+        List<String> cur = new ArrayList<String>();
+        cur.add(endWord);
+        cur.add(word);
+        update(cur, pathTable, result);
+    }
+    public void update(List<String> cur, HashTable<String, List<String>> pathTable, List<List<String>> result){
+      String word = cur.get(cur.size() - 1);
+      if(pathTable.get(word) == null){
+        List<String> solution = (ArrayList<String>)cur.clone();
+        Collections.reverse(solution);
+        result.add(solution);
+      }
+      else{
+        List<String> prevList = pathTable.get(word);
+        for(int i = 0; i < prevList.size(); i++){
+          cur.add(prevList.get(i));
+          update(cur, pathTable, result);
+          cur.remove(cur.size() - 1);
+        }
+      }
     }
 
     public boolean isMatch(String word1, String word2){
