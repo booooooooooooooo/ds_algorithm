@@ -1,67 +1,124 @@
 import java.util.*;
+
 public class Test{
   public static void main(String args[]){
-    LeetCodeWordSearch problem = new LeetCodeWordSearch();
-    char[][] board = {{'a', 'b'}};
-    String word = "ba";
-    System.out.println(problem.exist(board, word));
+    Solution solution = new Solution();
+    // String beginWord = "hit";
+    // String endWord = "dog";
+    // String[] wordArr = {"hot","dot"};
+    String beginWord = "hit";
+    String endWord = "cog";
+    String[] wordArr = {"hot","cog","dot","dog","hit","lot","log"};
+    Set<String> wordList = new HashSet<String>();
+    for(int i = 0; i < wordArr.length; i++){
+      wordList.add(wordArr[i]);
+    }
+    System.out.println(solution.findLadders(beginWord, endWord, wordList));
   }
 }
 
+class Solution {
+    public List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
+      //exclude corner case
+      //TODO in practical usage. So far no need in this question.
 
+      //initialize result
+      List<List<String>> result = new ArrayList<List<String>>();
 
-class LeetCodeWordSearch {
-    public static int[] dx = {1, 0, -1, 0};
-    public static int[] dy = {0, 1, 0, -1};
+      //initialize vairables needed to find all SHORTEST paths
+      int SHORTEST = -1;//update when first SHORTEST path is found. once updated, stopping add new word to wordQueue
+      boolean STOP_ADD = false;
+      LinkedList<String> wordQueue = new LinkedList<String>();
+      HashMap<String, Integer> lenTable = new HashMap<String, Integer>();
+      HashMap<String, Set<String> > pathTable = new HashMap<String, Set<String>>();//<curWord, prevWordList>
 
-    public boolean exist(char[][] board, String word) {
-      //exclude boundary case TODO
-      if(word == "") return true;
-      //initialize
-      boolean[][] visited = new boolean[board.length][board[0].length];
-      for(int i = 0; i < board.length; i++){
-        Arrays.fill(visited[i], false);
-      }
-      //scan and return result.
-      for(int i = 0; i < board.length; i++){
-        for(int j = 0; j < board[i].length; j++){
-          if(dfs(board, visited, i, j, word, "")){
-            for(int k = 0; k < board.length; k++)
-              System.out.println(Arrays.toString(visited[k]));
-            return true;
+      //find all SHORTEST paths
+      wordQueue.add(beginWord);
+      lenTable.put(beginWord, 2);
+      pathTable.put(beginWord, null);
+      wordList.remove(beginWord);//Caution: to make sure DAG
+      wordList.remove(endWord);//Caution: to make sure DAG
+      while( !wordQueue.isEmpty()){
+        String word = wordQueue.remove();
+        int len = lenTable.get(word);
+        if(isMatch(word, endWord)){
+          if(! STOP_ADD){
+            updateResult(endWord, word, pathTable, result);
+            SHORTEST = len;
+            STOP_ADD = true;
+          }else{
+            if(len == SHORTEST) updateResult(endWord, word, pathTable, result);
+            else break;
+          }
+        }else{
+          if(! STOP_ADD){
+            for(int j = 0; j < word.length(); j++){
+                char[] charArr = word.toCharArray();
+                for(char ch = 'a'; ch < 'z'; ch++){
+                    charArr[j] = ch;
+                    String check = new String(charArr);
+                    if(!check.equals(word) && wordList.contains(check)){
+                        wordQueue.add(check);
+                        lenTable.put(check, len + 1);
+                        Set<String> prevWordList = new HashSet<String>();
+                        prevWordList.add(word);
+                        pathTable.put(check, prevWordList);
+                        wordList.remove(check);//dynamically shrink size of wordList set
+                    }
+                    if(!check.equals(word) && !wordList.contains(check) && lenTable.containsKey(check) && lenTable.get(check) == len + 1){
+                      pathTable.get(check).add(word);
+                    }
+                }
+            }
           }
         }
       }
-      return false;
+
+      //return result;
+      return result;
     }
 
-    public boolean dfs(char[][] board,  boolean[][] visited, int row, int col, String word, String result){
-      //update before check base case
-      visited[row][col] = true;
-      result += board[row][col];
-      //prunning
-      if(! matchable(result, word)){
-        visited[row][col] = false;
-        return false;
+
+    public void updateResult(String endWord, String word, HashMap<String, Set<String>> pathTable, List<List<String>> result){
+        List<String> cur = new ArrayList<String>();
+        cur.add(endWord);
+        cur.add(word);
+        update(cur, pathTable, result);
+    }
+    public void update(List<String> cur, HashMap<String, Set<String>> pathTable, List<List<String>> result){
+      String word = cur.get(cur.size() - 1);
+      List<String> prevList = pathTable.get(word) == null ? null : new ArrayList<String>(pathTable.get(word));
+      // System.out.println(cur);
+      // System.out.println();
+      // System.out.println();
+
+      // System.out.println(prevList);
+      // System.out.println();
+      // System.out.println();
+      if(prevList == null){
+        List<String> solution = new ArrayList<String>();
+        for(int i = 0; i < cur.size(); i++){
+          solution.add(cur.get(i));
+        }
+        Collections.reverse(solution);
+        result.add(solution);
       }
-      //base case. Also, dfs terminates in this case.
-      if( result.equals(word) ) return true;
-      //if base case does not fullfil, check this node's subtrees.
-      for(int i = 0; i < dx.length; i++){
-        int newRow = row + dx[i];
-        int newCol = col + dy[i];
-        if(0 <= newRow && newRow < board.length && 0 <= newCol && newCol < board[0].length && visited[newRow][newCol] == false && dfs(board, visited, newRow, newCol, word, result))
-          return true;
+      else{
+        for(int i = 0; i < prevList.size(); i++){
+          cur.add(prevList.get(i));
+          update(cur, pathTable, result);
+          cur.remove(cur.size() - 1);
+        }
       }
-      //fails to find result. recover paremeter and return false. recursion goes back to parent node's next subtree or parent of parent's...or....
-      visited[row][col] = false;//not necessary to recover result, since String is immutable so result is local variable.
-      return false;
     }
 
-    public boolean matchable(String result, String word){
-      for(int i = 0; i < Math.min(result.length(), word.length() ); i++){
-        if(result.charAt(i) != word.charAt(i)) return false;
+    public boolean isMatch(String word1, String word2){
+      int count = 0;
+      for(int i = 0; i < word1.length(); i++){
+        if(word1.charAt(i) != word2.charAt(i)) count++;
       }
-      return true;
+      if(count == 1) return true;
+      else return false;
+
     }
 }

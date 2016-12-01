@@ -1,3 +1,6 @@
+import java.util.*;
+
+
 public class Solution {
     public List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
       //exclude corner case
@@ -6,27 +9,29 @@ public class Solution {
       //initialize result
       List<List<String>> result = new ArrayList<List<String>>();
 
-      //initialize vairables needed to find all shorted paths
-      int shorted;//update when first shorted path is found. once updated, stopping add new word to wordQueue
+      //initialize vairables needed to find all SHORTEST paths
+      int SHORTEST = -1;//update when first SHORTEST path is found. once updated, stopping add new word to wordQueue
       boolean STOP_ADD = false;
       LinkedList<String> wordQueue = new LinkedList<String>();
-      HashTable<String, Integer> lenTable = new HashTable<String, Integer>();
-      HashTable<String, List<String> > pathTable = new HashTable<String, List<String>>();//<curWord, prevWordList>
+      HashMap<String, Integer> lenTable = new HashMap<String, Integer>();
+      HashMap<String, Set<String> > pathTable = new HashMap<String, Set<String>>();//<curWord, prevWordList>
 
-      //find all shorted paths
+      //find all SHORTEST paths
       wordQueue.add(beginWord);
-      lenTable.add(beginWord, 2);
-      pathTable.add(beginWord, null);
+      lenTable.put(beginWord, 2);
+      pathTable.put(beginWord, null);
+      wordList.remove(beginWord);//Caution: to make sure DAG
+      wordList.remove(endWord);//Caution: to make sure DAG
       while( !wordQueue.isEmpty()){
         String word = wordQueue.remove();
         int len = lenTable.get(word);
         if(isMatch(word, endWord)){
           if(! STOP_ADD){
             updateResult(endWord, word, pathTable, result);
-            shorted = len;
+            SHORTEST = len;
             STOP_ADD = true;
           }else{
-            if(len == shorted) updateResult(endWord, word, pathTable, result);
+            if(len == SHORTEST) updateResult(endWord, word, pathTable, result);
             else break;
           }
         }else{
@@ -38,11 +43,13 @@ public class Solution {
                     String check = new String(charArr);
                     if(!check.equals(word) && wordList.contains(check)){
                         wordQueue.add(check);
-                        lenTable.add(check, len + 1);
-                        pathTable.add(check, new ArrayList<String>({word}));
+                        lenTable.put(check, len + 1);
+                        Set<String> prevWordList = new HashSet<String>();
+                        prevWordList.add(word);
+                        pathTable.put(check, prevWordList);
                         wordList.remove(check);//dynamically shrink size of wordList set
                     }
-                    if(!check.equals(word) && !wordList.contains(check) && lenTable.get(check) == len + 1){
+                    if(!check.equals(word) && !wordList.contains(check) && lenTable.containsKey(check) && lenTable.get(check) == len + 1){
                       pathTable.get(check).add(word);
                     }
                 }
@@ -55,22 +62,32 @@ public class Solution {
       return result;
     }
 
-    //TODO updateResult
-    public void updateResult(String endWord, String word, HashTable<String, List<String>> pathTable, List<List<String>> result){
+
+    public void updateResult(String endWord, String word, HashMap<String, Set<String>> pathTable, List<List<String>> result){
         List<String> cur = new ArrayList<String>();
         cur.add(endWord);
         cur.add(word);
         update(cur, pathTable, result);
     }
-    public void update(List<String> cur, HashTable<String, List<String>> pathTable, List<List<String>> result){
+    public void update(List<String> cur, HashMap<String, Set<String>> pathTable, List<List<String>> result){
       String word = cur.get(cur.size() - 1);
-      if(pathTable.get(word) == null){
-        List<String> solution = (ArrayList<String>)cur.clone();
+      List<String> prevList = pathTable.get(word) == null ? null : new ArrayList<String>(pathTable.get(word));
+      // System.out.println(cur);
+      // System.out.println();
+      // System.out.println();
+
+      // System.out.println(prevList);
+      // System.out.println();
+      // System.out.println();
+      if(prevList == null){
+        List<String> solution = new ArrayList<String>();
+        for(int i = 0; i < cur.size(); i++){
+          solution.add(cur.get(i));
+        }
         Collections.reverse(solution);
         result.add(solution);
       }
       else{
-        List<String> prevList = pathTable.get(word);
         for(int i = 0; i < prevList.size(); i++){
           cur.add(prevList.get(i));
           update(cur, pathTable, result);
