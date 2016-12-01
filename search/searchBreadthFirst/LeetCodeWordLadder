@@ -1,0 +1,40 @@
+public class Solution {
+    public int ladderLength(String beginWord, String endWord, Set<String> wordList) {
+      final int MAX_STEP = wordList.size() + 2;
+      LinkedList<String> wordQueue = new LinkedList<String>();
+      LinkedList<Integer> countQueue = new LinkedList<Integer>();
+      wordQueue.add(beginWord);
+      countQueue.add(1);
+      while(!countQueue.isEmpty()){
+        String word = wordQueue.remove();
+        int count = countQueue.remove();
+        count++;
+
+        if(isMatch(word, endWord)) return count;
+        if(count < MAX_STEP){
+          for(int j = 0; j < word.length(); j++){
+              char[] charArr = word.toCharArray();
+              for(char ch = 'a'; ch < 'z'; ch++){
+                  charArr[j] = ch;
+                  String check = new String(charArr);
+                  if(!check.equals(word) && wordList.contains(check)){
+                      countQueue.add(count);
+                      wordQueue.add(check);
+                      wordList.remove(check);//dynamically shrink size of wordList set
+                  }
+              }
+          }
+        }
+      }
+      return 0;//can not find result. Either dead in one round or infinite loop.
+    }
+    public boolean isMatch(String word1, String word2){
+      int count = 0;
+      for(int i = 0; i < word1.length(); i++){
+        if(word1.charAt(i) != word2.charAt(i)) count++;
+      }
+      if(count == 1) return true;
+      else return false;
+
+    }
+}
