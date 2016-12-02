@@ -1,3 +1,23 @@
+****BFS
+Surrounded Regions
+
+
+****Bitwise
+Subsets
+
+
+****DFS
+Subsets
+Subsets II
+Letter Combinations of a Phone Number
+
+
+
+****Disjoint set
+Number of Islands
+Surrounded Regions
+
+
 ****DP
 Longest Palindromic Substring
 Regular Expression Matching
@@ -28,13 +48,12 @@ Largest Rectangle in Histogram
 ****Sorting
 Sort Colors
 
+
+
 ****Stack
 Simplify Path
 Valid Parentheses
 Evaluate Reverse Polish Notation
-
-
-
 
 
 
@@ -53,8 +72,3 @@ Path Sum
 Path Sum II
 Binary Tree Maximum Path Sum
 Sum Root to Leaf Numbers
-
-
-****Disjoint set
-Number of Islands
-Surrounded Regions

@@ -1,14 +1,5 @@
 import java.util.*;
-
-public class Test{
-  public static void main(String args[]){
-    Solution solution = new Solution();
-    int[] nums = {1, 1, 2};
-    System.out.println(solution.permuteUnique(nums));
-  }
-}
-
-class Solution {
+public class Solution {
     public List<List<Integer>> permuteUnique(int[] nums) {
       //corner case??
       //initialize
