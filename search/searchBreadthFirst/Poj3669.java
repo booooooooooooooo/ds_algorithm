@@ -1,6 +1,14 @@
+/**
+BFS!
+*/
+
+//!!!Only use methods of Queue interface!!!!!!!!!!!!!!
+
+//TODO: rewrite to eliminate unnecessary checking such as ruin[0][0] <0
+
 import java.util.*;
 
-public class Poj3669_second_try{
+public class Main{
   static int[] dx = {-1, 0, 1, 0, 0};
   static int[] dy = {0, -1, 0, 1, 0};
 
@@ -66,5 +74,3 @@ class Situation{
     t = t_;
   }
 }
-
-//!!!Only use methods of Queue interface!!!!!!!!!!!!!!

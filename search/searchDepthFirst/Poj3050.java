@@ -43,7 +43,7 @@ public class Poj3050{
         }
       }
     }else if(result.length == 6){
-      String str = Arrays.toString(result);//!!!Must use String instead of int[]
+      String str = Arrays.toString(result);//"[1, 2, 3]" actually. But AC since result is size.....
       res.add(str);
     }else{
       System.out.println("Error!");

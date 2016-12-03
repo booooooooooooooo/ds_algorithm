@@ -1,3 +1,5 @@
+//TODO: rewrite to make variables more understandable.
+
 import java.util.*;
 import java.lang.Math.*;
 public class Poj3009{

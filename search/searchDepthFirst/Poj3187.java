@@ -1,3 +1,15 @@
+/**
+Use Pascal's triangular.
+n-1C0 * e0 + ... + (n - i)Ci * ei + ... + (n - 1)C(n-1) * en-1
+where e0 to en-1 is a permutation of set(1, 2, 3, ...n)
+*/
+
+/**
+Use next_permutation will make code shorter.
+*/
+
+//TODO: rewrite to make code tiny and tyny
+
 import java.util.*;
 
 public class Poj3187{
@@ -22,7 +34,7 @@ public class Poj3187{
     Arrays.fill(output, n);
 
     permutation(0, sum, n, used, perm, factor);
-    
+
     for(int i = 0; i < n; i++){
       if(i != n - 1){
         System.out.printf("%d ", output[i]);

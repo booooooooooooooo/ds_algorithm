@@ -2,9 +2,10 @@ import java.util.*;
 
 public class Test{
   public static void main(String args[]){
-    Solution solution = new Solution();
+    // Solution solution = new Solution();
     int[] nums = {1, 1, 2};
-    System.out.println(solution.permuteUnique(nums));
+    // System.out.println(solution.permuteUnique(nums));
+    System.out.println(Arrays.toString(nums));
   }
 }
 

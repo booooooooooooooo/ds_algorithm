@@ -106,3 +106,91 @@ public class Solution {
 
     }
 }
+
+/**
+Use Graph (Code is written by Digiter)
+*/
+import java.util.*;
+
+public class Solution {
+
+  public List<List<String>> findLadders(String beginWord, String endWord, Set<String> wordList) {
+    // Initialize graph.
+    Map<String, List<String>> graph = new HashMap<>();
+    for (String word : wordList) {
+      graph.put(word, new ArrayList<>());
+    }
+    // Add edges.
+    for (String word : wordList) {
+      for (int i = 0; i < word.length(); i++) {
+        char[] chars = word.toCharArray();
+        for (char c = 'a'; c <= 'z'; c++) {
+          if (c != chars[i]) {
+            chars[i] = c;
+            String other = new String(chars);
+            if (wordList.contains(other)) {
+              graph.get(word).add(other);
+            }
+          }
+        }
+      }
+    }
+
+    // Initialize dist.
+    Map<String, Integer> dist = new HashMap<>();
+    final int INFINITY = 0x3F3F3F3F;
+    for (String word : wordList) {
+      dist.put(word, INFINITY);
+    }
+    dist.put(beginWord, 0);
+    // Initialize queue.
+    Queue<String> queue = new LinkedList<>();
+    queue.add(beginWord);
+    // BFS.
+    while (!queue.isEmpty()) {
+      String from = queue.poll();
+      for (String to : graph.get(from)) {
+        if (dist.get(from) + 1 < dist.get(to)) {
+          dist.put(to, dist.get(from) + 1);
+          queue.add(to);
+        }
+      }
+    }
+
+    // Initialize reversed graph.
+    Map<String, List<String>> revGraph = new HashMap<>();
+    for (String word : wordList) {
+      revGraph.put(word, new ArrayList<>());
+    }
+    for (String from : graph.keySet()) {
+      for (String to : graph.get(from)) {
+        revGraph.get(to).add(from);
+      }
+    }
+    // Output solutions.
+    List<List<String>> ans = new ArrayList<List<String>>();
+    List<String> path = new ArrayList<>();
+    outputSolutions(revGraph, dist, beginWord, endWord, path, ans);
+    return ans;
+  }
+
+  void outputSolutions(Map<String, List<String>> revGraph,
+    Map<String, Integer> dist, String beginWord, String current,
+    List<String> path, List<List<String>> ans) {
+
+    path.add(current);
+    if (current.equals(beginWord)) {
+      List<String> pathCopy = new ArrayList(path);
+      Collections.reverse(pathCopy);
+      ans.add(pathCopy);
+      path.remove(path.size() - 1);
+      return;
+    }
+    for (String next : revGraph.get(current)) {
+      if (dist.get(next) == dist.get(current) - 1) {
+        outputSolutions(revGraph, dist, beginWord, next, path, ans);
+      }
+    }
+    path.remove(path.size() - 1);
+  }
+}
