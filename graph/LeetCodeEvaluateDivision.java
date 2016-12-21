@@ -1,15 +1,6 @@
 import java.util.*;
 
-public class Test{
-  public static void main(String args[]){
-    String[][] equations = {{"a", "b"}, {"b", "c"}};
-    double[] values = {2.0, 3.0};
-    String[][] queries = {{"a", "c"}, {"b","c"}, {"a","e"}, {"a","a"}, {"x","x"}};
-    System.out.println( Arrays.toString((new Solution()).calcEquation(equations, values, queries)) );
-  }
-}
-
-class Solution {
+public class Solution {
     public double[] calcEquation(String[][] equations, double[] values, String[][] queries) {
       //make adjList using equations and values
       HashMap<String, HashMap<String, Double>> adjList = new HashMap<String, HashMap<String, Double>>();
@@ -56,7 +47,7 @@ class Solution {
           for(String end : adjList.get(start).keySet()){
             if(!markedEdge.containsKey(start)){
               markedEdge.put(start, end);
-              if(end == finalEnd || dfs(adjList, end, finalEnd, markedEdge)) return true;
+              if(end.equals(finalEnd) || dfs(adjList, end, finalEnd, markedEdge)) return true;
               markedEdge.remove(start);
             }
           }
