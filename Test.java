@@ -2,65 +2,52 @@ import java.util.*;
 
 public class Test{
   public static void main(String args[]){
-    String[][] equations = {{"a", "b"}, {"b", "c"}};
-    double[] values = {2.0, 3.0};
-    String[][] queries = {{"a", "c"}, {"b","c"}, {"a","e"}, {"a","a"}, {"x","x"}};
-    System.out.println( Arrays.toString((new Solution()).calcEquation(equations, values, queries)) );
+    String s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+
+    System.out.println( (new Solution()).longestPalindrome(s) );
   }
 }
 
-class Solution {
-    public double[] calcEquation(String[][] equations, double[] values, String[][] queries) {
-      //make adjList using equations and values
-      HashMap<String, HashMap<String, Double>> adjList = new HashMap<String, HashMap<String, Double>>();
-      for(int i = 0; i < values.length; i++){
-        String start = equations[i][0];
-        String end = equations[i][1];
-        Double v = values[i];
-        adjList.putIfAbsent(start, new HashMap<String, Double>());
-        adjList.get(start).put(end, v);
-        adjList.putIfAbsent(end, new HashMap<String, Double>());
-        adjList.get(end).put(start, 1.0 / v);
-      }
+ class Solution {
+    public String longestPalindrome(String s) {
+      //exclude corner case
+      if(s.equals("")) return "";
 
-      //iterate queries, call gao() to get answer and append answer to result.
-      double[] results = new double[queries.length];
-      for(int i = 0; i < queries.length; i++){
-        String[] query = queries[i];
-        double result = gao(adjList, query);
-        results[i] = result;
-      }
-      //return results
-      return results;
-    }
-    public double gao(HashMap<String, HashMap<String, Double>> adjList, String[] query){
-      HashMap<String, String> markedEdge = new HashMap<String, String>();
-      boolean exists = dfs(adjList, query[0], query[1], markedEdge);
-      if(exists){
-        double result = 1;
-        for(String start : markedEdge.keySet()){
-          String end = markedEdge.get(start);
-          double factor = adjList.get(start).get(end);
-          result *= factor;
-        }
-        return result;
-      }
-      //no solution.
-      return -1;
+      //initialize dp array
+      int n = s.length();
+      List<List<Integer>> dp = new ArrayList<List<Integer>>();
+      for(int i = 0; i < n; i++) dp.add(new ArrayList<Integer>());
 
-    }
-
-    public boolean dfs(HashMap<String, HashMap<String, Double>> adjList, String start, String finalEnd, HashMap<String, String> markedEdge){
-      if(!adjList.containsKey(start)) return false;
-      else{
-          for(String end : adjList.get(start).keySet()){
-            if(!markedEdge.containsKey(start)){
-              markedEdge.put(start, end);
-              if(end == finalEnd || dfs(adjList, end, finalEnd, markedEdge)) return true;
-              markedEdge.remove(start);
-            }
+      //Scan to update dp
+      for(int i = 0; i < n; i++){
+        List<Integer> cur = dp.get(i);
+        cur.add(0);
+        cur.add(1);
+        if(i != 0){
+          List<Integer> prev = dp.get(i - 1);
+          for(int j = 0; j < prev.size(); j++){
+            int len = prev.get(j);
+            if( i - len - 1 >= 0 && s.charAt(i) == s.charAt(i - len - 1) ) cur.add(len + 2);
           }
-          return false;
+        }
       }
+
+      //get result
+      int left = -1;
+      int right = -1;//[left, right)
+      int maxLen = Integer.MIN_VALUE;
+      for(int i = 0; i < dp.size(); i++){
+        for(int j = 0; j < dp.get(i).size(); j++){
+          int len = dp.get(i).get(j);
+          if( len > maxLen){
+            maxLen = len;
+            left = i - len + 1;
+            right = i + 1;
+          }
+        }
+      }
+
+      //return result;
+      return s.substring(left, right);
     }
 }
