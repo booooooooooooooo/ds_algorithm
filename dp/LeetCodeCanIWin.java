@@ -1,16 +1,6 @@
-import java.util.*;
-
-public class Test{
-  public static void main(String args[]){
-    boolean result = (new Solution()).canIWin(18, 79);
-    System.out.println(result);
-  }
-}
-
-
-class Solution {
+public class Solution {
     public boolean canIWin(int maxChoosableInteger, int desiredTotal) {
-      //exclude corner case
+      //exclude corner case make sure there is solution.
       if((maxChoosableInteger + 1) * maxChoosableInteger / 2 < desiredTotal) return false;
       //initialize dp array and others
       Map<Integer, Boolean> dp = new HashMap<Integer, Boolean>();
