@@ -2,8 +2,9 @@ import java.util.*;
 
 public class Test{
   public static void main(String args[]){
-    boolean result = (new Solution()).canIWin(18, 79);
-    System.out.println(result);
+    long a = 2000000000;
+    long b = -294967296;
+    System.out.println(b - a);
   }
 }
 
