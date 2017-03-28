@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Test{
+public class TestLeetCode{
   public static void main(String args[]){
     int[] nums = {-2,0,-2,5,5,1};
     System.out.println((new  Solution()).reversePairs(nums));
