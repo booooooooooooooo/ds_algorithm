@@ -1,34 +1,21 @@
-import java.util.*;
-
-public class Test{
-  public static void main(String args[]){
-    int[] nums = {-2,0,-2,5,5,1};
-    System.out.println((new  Solution()).reversePairs(nums));
-  }
-}
-
- class Solution {
+public class Solution {
     public int reversePairs(int[] nums) {
-        //Make candidates[] that stores unique values of nums[] in acsending order.
+        //Make candidates[] that stores unique values of nums[i]*2 in acsending order.
+        //Caution: use long to avoid overflow
         int[] temp = Arrays.copyOf(nums, nums.length);
         Arrays.sort(temp);
-        System.out.println(Arrays.toString(nums));
-        System.out.println(Arrays.toString(temp));
         int left = 0;
         int right = 0;
         while(right < temp.length){
           temp[left] = temp[right];
           left++;
           right++;
-          while(right + 1 < nums.length && nums[right] == nums[right + 1]) right++;
+          while(right + 1 < temp.length && temp[right] == temp[right + 1]) right++;
         }
         long[] candidates = new long[left];
         for(int i = 0; i < candidates.length; i++){
           candidates[i] = 2 * (long)temp[i];
         }
-        System.out.println(Arrays.toString(nums));
-        System.out.println(Arrays.toString(temp));
-        System.out.println(Arrays.toString(candidates));
 
 
         //make Segment tree of the frequency of each candidates[i]
