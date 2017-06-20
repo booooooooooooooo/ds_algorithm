@@ -1,21 +1,38 @@
-import java.util.*;
+public class Solution {
+  public String multiply(String num1, String num2) {
+      //exclude corner case:None
 
-public class Test{
-  public static void main(String args[]){
+      int[] arrResult = new int[num1.length() + num2.length()];
+      arrResult[num1.length() + num2.length() - 1] = 0;
+      for(int i = num1.length() - 1; i >= 0; i--){
+        for(int j = num2.length() - 1; j >= 0; j--){
+          int mul = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+          int sum = mul + arrResult[i + j + 1];
+          arrResult[i + j + 1] = sum % 10;
+          arrResult[i + j] += sum / 10;
+        }
+      }
 
-
-    String num1 =   "2502044422132801038372";
-    String num2 = "4734975193145809220560772055990393780592828328442610";
-    System.out.println(num1);
-    System.out.println(num2);
-    System.out.println((new Solution()).multiply(num1, num2));
-
+      StringBuilder sb = new StringBuilder();
+      for(int a : arrResult){
+        if(!(sb.length() == 0 && a == 0))
+          sb.append(a);
+      }
+      return sb.length() == 0 ? "0" : sb.toString();
   }
-
 }
 
 
- class Solution {
+
+
+
+
+
+
+
+
+//TLE. Too many string operations???
+public class Solution {
     public String multiply(String num1, String num2) {
       //exclude corner case. None.
 

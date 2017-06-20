@@ -8,7 +8,7 @@ public class Quicksort {
  static void swap(int a, int b) {
    int temp = arr[a]; arr[a] = arr[b]; arr[b] = temp;
  }
-
+ //Caution: in this method, pivot position stores any number in bigger interval, not the smallest number in bigger interval
  static int partition(int start, int end) {
    swap(start, start + rnd.nextInt(end - start));
    int div = arr[start];
