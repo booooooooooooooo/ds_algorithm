@@ -3,7 +3,10 @@ import java.util.*;
 public class Test{
   public static void main(String args[]){
 
-    TreeNode t = null;
+    // StringBuilder sb = new StringBuilder(null);
+    StringBuilder sb2 = new StringBuilder("");
+    // System.out.println(sb);
+    System.out.println(sb2);
 
   }
 
