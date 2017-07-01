@@ -1,3 +1,6 @@
+//I think my solution is correct BUT slow
+//Also, I am not sharp on the logic of this problem. So I have made a lot of mistakes in the process.
+
 import java.math.BigInteger;
 public class Solution {
   private String num;
@@ -35,15 +38,17 @@ public class Solution {
         dfs(index + 2);
         sb.deleteCharAt(index);
       }else{
-        for(int i = 2; i <= sb.length() + 1 - index; i++){
-          sb.insert(index, '+');
+        sb.insert(index, '+');
+        for(int i = 2; i <= sb.length() - index; i++)
           dfs(index + i);
-          sb.setCharAt(index, '-');
+        sb.setCharAt(index, '-');
+        for(int i = 2; i <= sb.length() - index; i++)
           dfs(index + i);
-          sb.setCharAt(index, '*');
+        sb.setCharAt(index, '*');
+        for(int i = 2; i <= sb.length() - index; i++)
           dfs(index + i);
-          sb.deleteCharAt(index);
-        }
+        sb.deleteCharAt(index);
+
       }
     }
     private String evaluate(String exp){

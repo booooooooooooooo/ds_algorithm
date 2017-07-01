@@ -1,0 +1,20 @@
+public class Solution {
+    //Assume nums is a valid input
+    public int findMin(int[] nums) {
+        //corner case
+        if(nums.length == 1) return nums[0];
+        //not rotated
+        if(nums[0] < nums[nums.length - 1]) return nums[0];
+        //rotated
+        int start = 0;
+        int end = nums.length;
+        while(start < end){
+          int mid = start + (end - start) / 2;
+          if(nums[mid] < nums[mid - 1]) return nums[mid];//mid >= 1? Yes
+          else if(nums[mid] > nums[nums.length - 1]) start = mid + 1;
+          else end = mid;
+        }
+
+        return 0;//for passing compiler. I am sure a result is returned in previous steps
+    }
+}

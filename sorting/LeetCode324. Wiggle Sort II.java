@@ -1,25 +1,12 @@
-import java.util.*;
-
-public class Test{
-  public static void main(String args[]){
-    int[] nums = new int[]{1,3,2,2,3,1};
-    (new Solution()).wiggleSort(nums);
-    System.out.println(Arrays.toString(nums) );
-
-
-
-  }
-
-}
- class Solution {
+public class Solution {
     public void wiggleSort(int[] nums) {
+
       int n = nums.length;
       int median = (new Helper()).findKthLargest(nums, (nums.length + 1) / 2 );//TODO: L never goes to S row??
-      System.out.println(median);
-      int left = 0;
-      int i = 0;
-      int right = n % 2 == 0 ? n - 1 : n - 2;
-      while(compare(i, right) <= 0){
+      int left = n % 2 == 0 ? n - 2 : n - 1;
+      int i = left;
+      int right = 1;
+      while(0 <= i && i < n && compare(i, right) <= 0){
         if(nums[i] > median){
           swap(nums, i, right);
           right = decrease(n, right);
@@ -32,19 +19,22 @@ public class Test{
       }
     }
     private int increase(int n, int i){
-      if(i % 2 == 1) return i + 2;
-      else if(i + 2 <= (n % 2 == 0 ? n - 2 : n - 1) ) return i + 2;
-      else return 1;
+
+
+      if(i % 2 == 0 && i - 2 >= 0) return i - 2;
+      else if(i % 2 == 0 && i - 2 < 0) return n % 2 == 0 ? n - 1 : n - 2;
+      else return i - 2;
+
     }
     private int decrease(int n, int i){
-      if(i % 2 == 0) return i - 2;
-      else if(i % 2 == 1 && i - 2 >= 1) return i - 2;
-      else return n % 2 == 0 ? n - 2 : n - 1;
+      if(i % 2 == 1 && i + 2 <= (n % 2 == 0 ? n - 1 : n - 2)) return i + 2;
+      else if(i % 2 == 1 && i + 2 > (n % 2 == 0 ? n - 1 : n - 2)) return 0;
+      else  return i + 2;
     }
     private int compare(int i1, int i2){
       if(i1 % 2 == 0 && i2 % 2 == 1) return -1;
       else if(i1 % 2 == 1 && i2 %2 == 0) return 1;
-      else return i1 - i2;
+      else return -(i1 - i2);//!!!!!
     }
     private void swap(int[] nums, int i1, int i2){
       int temp = nums[i1];
