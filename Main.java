@@ -3,46 +3,75 @@ import java.util.*;
 public class Main{
   public static void main(String args[]){
     Scanner cin = new Scanner(System.in);
-    while(cin.hasNextInt()){
-      int N = cin.nextInt();
-      int C = cin.nextInt();
-      int[] stalls = new int[N];
-      for(int i = 0; i < stalls.length; i++){
-        stalls[i] = cin.nextInt();
-      }
-      //exclude corner cases None
-
-      System.out.println(solve(C, stalls));
+    while(cin.hasNext()){
+      int c = cin.nextInt();
+      int l = cin.nextInt();
+      List<Cow> cows = new ArrayList<Cow>();
+      for(int i = 0; i < c; i++) cows.add(new Cow(cin.nextInt(), cin.nextInt()));
+      List<Lotion> lotions = new ArrayList<Lotion>();
+      for(int i = 0; i < l; i++) lotions.add(new Lotion(cin.nextInt(), cin.nextInt() ) );
+      System.out.println(solve(cows, lotions));
     }
-
   }
-  public static int solve(int C, int[] stalls){
-    int n = stalls.length;
-    Arrays.sort(stalls);
-    //[first, end) covers all possible solutions
-    int end = stalls[n - 1] - stalls[0] + 1;
-    int first = 0;
-    //Get upperBound of solution
-    while(first < end){
-      int mid = first + (end - first) / 2;
-      if(isValid(mid, C, stalls)) first = mid + 1;
-      else end = mid;
-    }
-    return first - 1;
-  }
-
-  public static boolean isValid(int d, int C, int[] stalls){
-    int count = 1;
-    int index = 0;
-    int i = 1;
-    while(i < stalls.length){
-      if(stalls[i] - stalls[index] >= d){
-        count++;
-        index = i;
+  private static int solve(List<Cow> cows, List<Lotion> lotions){
+    //sort lotions by value acsendingly
+    Collections.sort(lotions, new Comparator<Lotion>(){
+      @Override
+      public int compare(Lotion l1, Lotion l2){
+        return l1.value - l2.value;
       }
-      i++;
+    });
+    //build min heap of cows by right
+    Queue<Cow> minHeap = new PriorityQueue<Cow>(1, new Comparator<Cow>(){
+      @Override
+      public int compare(Cow c1, Cow c2){
+        return c1.right - c2.right;
+      }
+    });
+    minHeap.addAll(cows);
+    //iterate and return result
+    int result = 0;
+    for(int i = 0; i < lotions.size(); i++){
+      Queue<Cow> nextHeap = new  PriorityQueue<Cow>(1, new Comparator<Cow>(){
+        @Override
+        public int compare(Cow c1, Cow c2){
+          return c1.right - c2.right;
+        }
+      });
+      int value = lotions.get(i).value;
+      int count = lotions.get(i).count;
+      while(!minHeap.isEmpty()){
+        Cow cow = minHeap.remove();
+        if(cow.right < value){
+          ;
+        }else if(cow.left > value){
+          nextHeap.add(cow);
+        }else if(count > 0){
+          count--;
+          result++;
+        }else
+          nextHeap.add(cow);
+      }
+      minHeap = nextHeap;
     }
-    if(count >= C) return true;
-    else return false;
+    return result;
+  }
+}
+
+class Cow{
+  public int left;
+  public int right;
+  public Cow(int left, int right){
+    this.left = left;
+    this.right = right;
+  }
+}
+
+class Lotion{
+  public int value;
+  public int count;
+  public Lotion(int value, int count){
+    this.value = value;
+    this.count = count;
   }
 }
