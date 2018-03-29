@@ -1,18 +1,14 @@
 # practice_algorithm
 
-git rm -r --cached .
-删除本地全部cache
+This repository contians my records of solving various algorithm problems.
+### tiaozhanchengxusheji
+Solving problems following the excellent book https://www.amazon.cn/dp/B00DQ3HK3S
 
-git add .
-添加当前目录中的文件
+### leetcode-cpp
+Solving problems following the excellent book https://github.com/soulmachine/leetcode
 
-git status
-查看当前文件的状态，红色是修改了未跟踪，绿色是跟踪了的
+### template
+Nice functions or classes used in solving problems
 
-git commit -m "comments"
-提交到本地，comments替换为你需要的注释
-
-git push
-是push到github
-
-git push -f origin master
+### pool
+My past records. They are not well organized. I will keep moving files from it to an organized folder.
