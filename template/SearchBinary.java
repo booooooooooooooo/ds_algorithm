@@ -4,7 +4,7 @@ lowerBound: index of first element who >= value or array.length
 upperBound: index of first element who > value or array.length
 */
 
-public class TemplateSearchBinary {
+public class SearchBinary {
   int lowerBound(int[] array, int first, int last, int value) {
     while(first < last){
       int mid = first + (last - first) / 2; //prevent max integer overflow of (first + last) / 2
